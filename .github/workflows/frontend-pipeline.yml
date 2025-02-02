@@ -38,8 +38,8 @@ jobs:
 
     - name: Tag Docker image
       run: |
-        docker tag my-frontend-image demo.goharbor.io/my-app-items/my-frontend:latest
+        docker tag my-frontend-image demo.goharbor.io/my-app-items/my-frontend-ui:latest
 
     - name: Push Docker image to Harbor
       run: |
-        docker push demo.goharbor.io/my-app-items/my-frontend:latest
+        docker push demo.goharbor.io/my-app-items/my-frontend-ui:latest
