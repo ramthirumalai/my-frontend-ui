@@ -33,13 +33,19 @@ jobs:
     - name: Log in to Harbor
       uses: docker/login-action@v2
       with:
+        registry: demo.goharbor.io
         username: ${{ secrets.HARBOR_USERNAME }}
         password: ${{ secrets.HARBOR_PASSWORD }}
 
-    - name: Tag Docker image
+    # Get the latest Git commit hash and create a version tag
+    - name: Get Git Commit Hash
+      id: commit_hash
+      run: echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+ 
+    - name: build and tag Docker image
       run: |
-        docker tag my-frontend-image demo.goharbor.io/my-app-items/my-frontend-ui:latest
+        docker build -t tag demo.goharbor.io/my-app-items/my-frontend-ui:${{ env.COMMIT_HASH }} .
 
     - name: Push Docker image to Harbor
       run: |
-        docker push demo.goharbor.io/my-app-items/my-frontend-ui:latest
+        docker push demo.goharbor.io/my-app-items/my-frontend-ui:${{ env.COMMIT_HASH }}
