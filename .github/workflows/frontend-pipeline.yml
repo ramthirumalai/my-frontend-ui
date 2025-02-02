@@ -44,7 +44,7 @@ jobs:
  
     - name: build and tag Docker image
       run: |
-        docker build -t tag demo.goharbor.io/my-app-items/my-frontend-ui:${{ env.COMMIT_HASH }} .
+        docker build -t demo.goharbor.io/my-app-items/my-frontend-ui:${{ env.COMMIT_HASH }} .
 
     - name: Push Docker image to Harbor
       run: |
