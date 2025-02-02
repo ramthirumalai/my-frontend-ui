@@ -1,0 +1,45 @@
+name: Frontend CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  # or the version you're using
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build React app
+      run: npm run build
+
+    - name: Build Docker image for React
+      run: docker build -t my-frontend-image .
+
+    - name: Log in to Harbor
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.HARBOR_USERNAME }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+
+    - name: Tag Docker image
+      run: |
+        docker tag my-frontend-image demo.goharbor.io/my-app-items/my-frontend:latest
+
+    - name: Push Docker image to Harbor
+      run: |
+        docker push demo.goharbor.io/my-app-items/my-frontend:latest
